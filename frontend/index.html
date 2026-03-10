@@ -713,10 +713,10 @@ body {
   border: none;
   outline: none;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 14px;  
   color: var(--ink);
   resize: none;
-  min-height: 22px;
+  min-height: 30px;
   max-height: 120px;
   line-height: 1.5;
   padding: 2px 0;
@@ -805,6 +805,204 @@ body {
 
 .drag-overlay.active { display: flex; }
 
+/* Members modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,14,13,0.35);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 520px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 24px 28px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--ink);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+  transition: color 0.2s;
+}
+.modal-close:hover { color: var(--ink); }
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 28px;
+}
+
+.modal-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+.modal-section-label:first-child { margin-top: 0; }
+
+.member-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--cream);
+}
+.member-item:last-child { border-bottom: none; }
+
+.member-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.member-name {
+  flex: 1;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.member-role-select {
+  font-family: var(--font-body);
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  color: var(--ink);
+  background: var(--paper);
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-remove {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-remove:hover { border-color: #dc2626; color: #dc2626; }
+
+.invite-box {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.invite-code {
+  flex: 1;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--ink);
+  word-break: break-all;
+}
+
+.btn-copy {
+  background: var(--ink);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.btn-copy:hover { background: #2a2520; }
+
+.btn-generate {
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  margin-top: 8px;
+}
+.btn-generate:hover { border-color: var(--accent); color: var(--accent); }
+
+.role-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 20px;
+  margin-left: 6px;
+}
+.role-badge.owner   { background: #fef3c7; color: #92400e; }
+.role-badge.editor  { background: #dbeafe; color: #1e40af; }
+.role-badge.viewer  { background: var(--cream); color: var(--muted); }
+.role-badge.pending { background: #fce7f3; color: #9d174d; }
+
+/* Join workspace row in sidebar */
+.sidebar-join {
+  padding: 0 12px 12px;
+}
+.join-row { display: flex; gap: 8px; }
+.btn-join {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 12px;
+  padding: 9px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-join:hover { border-color: var(--accent); color: var(--accent); }
+
 </style>
 </head>
 <body>
@@ -854,6 +1052,19 @@ body {
 
 <div class="drag-overlay" id="dragOverlay">Drop to upload</div>
 
+<!-- Members Modal -->
+<div class="modal-overlay" id="membersModal" onclick="if(event.target===this)closeMembersModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Members</div>
+      <button class="modal-close" onclick="closeMembersModal()">✕</button>
+    </div>
+    <div class="modal-body" id="membersModalBody">
+      <div style="color:var(--muted);font-size:13px;">Loading…</div>
+    </div>
+  </div>
+</div>
+
 <!-- App -->
 <div id="app">
   <div class="layout">
@@ -871,6 +1082,13 @@ body {
         <div class="create-row">
           <input class="sidebar-input" id="newWorkspaceName" placeholder="Create new workspace">
           <button class="btn-create" onclick="createWorkspace()">+</button>
+        </div>
+      </div>
+
+      <div class="sidebar-join">
+        <div class="join-row">
+          <input class="sidebar-input" id="joinCodeInput" placeholder="Invite code">
+          <button class="btn-join" onclick="joinWorkspace()">Join</button>
         </div>
       </div>
 
@@ -895,7 +1113,8 @@ body {
               <div class="spinner" id="uploadSpinner"></div>
               <span id="uploadMsg">Uploading…</span>
             </div>
-            <label class="upload-label" for="fileInput">↑ Upload Document</label>
+            <button id="membersBtn" class="upload-label" style="background:var(--paper);color:var(--ink);border:1px solid var(--border);display:none;" onclick="openMembersModal()">👥 Members</button>
+            <label class="upload-label" id="uploadBtn" for="fileInput">↑ Upload Document</label>
             <input type="file" id="fileInput" accept=".pdf,.txt,.md" onchange="uploadFile()">
           </div>
         </div>
@@ -953,8 +1172,8 @@ function docStatusBadge(status) {
 function pollDocumentStatus(docId) {
   const interval = setInterval(async () => {
     try {
-      const res = await fetch(`${API}/document-status/${docId}`, { headers: authHeaders() });
-      if (!res.ok) { clearInterval(interval); return; }
+      const res = await apiFetch(`${API}/document-status/${docId}`);
+      if (!res || !res.ok) { clearInterval(interval); return; }
       const data = await res.json();
 
       loadDocuments();
@@ -975,6 +1194,7 @@ marked.setOptions({ breaks: true, gfm: true });
 const API = "http://localhost:8000";
 let authToken = localStorage.getItem("token");
 let currentWorkspace = null;
+let currentRole = null;  // tracks role in current workspace
 
 function switchTab(tab) {
   document.querySelectorAll('.auth-tab').forEach((t, i) => {
@@ -986,6 +1206,19 @@ function switchTab(tab) {
 
 function authHeaders() {
   return { Authorization: `Bearer ${authToken}` };
+}
+
+async function apiFetch(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: { ...authHeaders(), ...(options.headers || {}) }
+  });
+  if (res.status === 401) {
+    localStorage.removeItem("token");
+    location.reload();
+    return null;
+  }
+  return res;
 }
 
 function showApp() {
@@ -1048,7 +1281,8 @@ async function register() {
 }
 
 async function loadWorkspaces() {
-  const res = await fetch(`${API}/workspaces`, { headers: authHeaders() });
+  const res = await apiFetch(`${API}/workspaces`);
+  if (!res) return;
   const workspaces = await res.json();
   const list = document.getElementById("workspaceList");
   list.innerHTML = "";
@@ -1056,8 +1290,8 @@ async function loadWorkspaces() {
   workspaces.forEach(w => {
     const div = document.createElement("div");
     div.className = "workspace-item" + (w.id === currentWorkspace ? " active" : "");
-    div.innerHTML = `<span class="ws-icon">📁</span>${esc(w.name)}`;
-    div.onclick = () => openWorkspace(w.id, w.name);
+    div.innerHTML = `<span class="ws-icon">📁</span>${esc(w.name)}<span class="role-badge ${w.role}">${w.role}</span>`;
+    div.onclick = () => openWorkspace(w.id, w.name, w.role);
     list.appendChild(div);
   });
 }
@@ -1066,27 +1300,42 @@ async function createWorkspace() {
   const name = document.getElementById("newWorkspaceName").value.trim();
   if (!name) return;
 
-  const res = await fetch(`${API}/workspaces`, {
+  const res = await apiFetch(`${API}/workspaces`, {
     method: "POST",
-    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name })
   });
 
-  if (res.ok) {
+  if (res && res.ok) {
     document.getElementById("newWorkspaceName").value = "";
     loadWorkspaces();
   }
 }
 
-function openWorkspace(id, name) {
+function openWorkspace(id, name, role) {
   currentWorkspace = id;
+  currentRole = role;
 
   document.getElementById("emptyState").style.display = "none";
   document.getElementById("workspaceContent").style.display = "flex";
   document.getElementById("workspaceTitle").textContent = name;
 
+  // Show/hide upload based on role
+  const canUpload = role === "owner" || role === "editor";
+  document.getElementById("uploadBtn").style.display = canUpload ? "" : "none";
+
+  // Show members button only to owners
+  document.getElementById("membersBtn").style.display = role === "owner" ? "" : "none";
+
   document.querySelectorAll(".workspace-item").forEach(el => {
-    el.classList.toggle("active", el.textContent.trim() === name);
+    el.classList.toggle("active", el.dataset && el.dataset.id == id);
+  });
+
+  // Fix active state using onclick reference
+  document.querySelectorAll(".workspace-item").forEach(el => {
+    const isActive = el.querySelector(".ws-icon") &&
+      el.textContent.replace(/owner|editor|viewer|pending/g, "").trim().replace("📁", "").trim() === name;
+    el.classList.toggle("active", isActive);
   });
 
   loadDocuments();
@@ -1097,8 +1346,8 @@ async function loadChatHistory() {
   const chat = document.getElementById("chatHistory");
   chat.innerHTML = "";
 
-  const res = await fetch(`${API}/chat-history/${currentWorkspace}`, { headers: authHeaders() });
-  if (!res.ok) {
+  const res = await apiFetch(`${API}/chat-history/${currentWorkspace}`);
+  if (!res || !res.ok) {
     chat.innerHTML = `<div class="chat-welcome"><h3>Ask anything</h3><p>Upload documents to this workspace, then ask questions and get AI-powered answers from your content.</p></div>`;
     return;
   }
@@ -1131,11 +1380,13 @@ async function uploadFile() {
   const form = new FormData();
   form.append("file", file);
 
-  const res = await fetch(`${API}/upload/${currentWorkspace}`, {
-    method: "POST", headers: authHeaders(), body: form
+  const res = await apiFetch(`${API}/upload/${currentWorkspace}`, {
+    method: "POST", body: form
   });
 
   document.getElementById("fileInput").value = "";
+
+  if (!res) return;
 
   if (res.ok) {
     const data = await res.json();
@@ -1144,15 +1395,18 @@ async function uploadFile() {
     loadDocuments();
     pollDocumentStatus(data.id);
     setTimeout(() => { progress.style.display = "none"; progress.classList.remove("success"); }, 2500);
+  } else if (res.status === 409) {
+    const data = await res.json();
+    showUploadError(data.detail);
   } else {
-    msg.textContent = "Upload failed";
-    setTimeout(() => { progress.style.display = "none"; }, 2500);
+    showUploadError("Upload failed");
   }
 }
 
 async function loadDocuments() {
   if (!currentWorkspace) return;
-  const res = await fetch(`${API}/documents/${currentWorkspace}`, { headers: authHeaders() });
+  const res = await apiFetch(`${API}/documents/${currentWorkspace}`);
+  if (!res) return;
   const docs = await res.json();
 
   document.getElementById("docCount").textContent = docs.length;
@@ -1162,6 +1416,8 @@ async function loadDocuments() {
     list.innerHTML = `<div class="docs-empty">No documents yet.<br>Upload a file to begin.</div>`;
     return;
   }
+
+  const canDelete = currentRole === "owner" || currentRole === "editor";
 
   list.innerHTML = "";
   docs.forEach(doc => {
@@ -1175,7 +1431,8 @@ async function loadDocuments() {
     <div class="doc-info">
         <div class="doc-name" title="${esc(doc.filename)}">${esc(doc.filename)}</div>
         <div class="doc-meta">${kb}${kb && docStatusBadge(doc.status) ? ' · ' : ''}${docStatusBadge(doc.status)}</div>
-    </div>`;
+    </div>
+    ${canDelete ? `<button class="btn-remove" onclick="deleteDocument(${doc.id})" title="Delete">✕</button>` : ''}`;
     list.appendChild(div);
   });
 }
@@ -1201,14 +1458,14 @@ async function askAI() {
     <div class="msg-avatar">AI</div>
     <div class="msg-body">
       <div class="msg-role">Assistant</div>
-      <div class="msg-bubble" id="streamBubble">
+      <div class="msg-bubble">
         <div class="thinking"><span></span><span></span><span></span></div>
       </div>
     </div>`;
   chat.appendChild(aiDiv);
   chat.scrollTop = chat.scrollHeight;
 
-  const bubble = document.getElementById("streamBubble");
+  const bubble = aiDiv.querySelector(".msg-bubble");
   let fullText = "";
   let started = false;
 
@@ -1334,18 +1591,168 @@ document.addEventListener('drop', async e => {
 
   const form = new FormData();
   form.append("file", file);
-  const res = await fetch(`${API}/upload/${currentWorkspace}`, { method: "POST", headers: authHeaders(), body: form });
+  const res = await apiFetch(`${API}/upload/${currentWorkspace}`, { method: "POST", body: form });
 
+  if (!res) return;
   if (res.ok) {
+    const data = await res.json();
     progress.classList.add("success");
     msg.textContent = "Document uploaded ✓";
     loadDocuments();
+    pollDocumentStatus(data.id);
     setTimeout(() => { progress.style.display = "none"; progress.classList.remove("success"); }, 2500);
   } else {
     msg.textContent = "Upload failed";
     setTimeout(() => { progress.style.display = "none"; }, 2500);
   }
 });
+
+async function joinWorkspace() {
+  const code = document.getElementById("joinCodeInput").value.trim();
+  if (!code) return;
+
+  const res = await apiFetch(`${API}/workspaces/join/${code}`, { method: "POST" });
+  if (!res) return;
+
+  const data = await res.json();
+  document.getElementById("joinCodeInput").value = "";
+
+  if (res.ok) {
+    alert(`Joined "${data.workspace_name}"! Your role is pending — wait for the owner to grant access.`);
+    loadWorkspaces();
+  } else {
+    alert(data.detail || "Failed to join workspace");
+  }
+}
+
+async function deleteDocument(docId) {
+  if (!confirm("Delete this document? This cannot be undone.")) return;
+
+  const res = await apiFetch(`${API}/documents/${docId}`, { method: "DELETE" });
+  if (!res) return;
+
+  if (res.ok) {
+    loadDocuments();
+  } else {
+    const data = await res.json();
+    alert(data.detail || "Failed to delete document");
+  }
+}
+
+function showUploadError(msg) {
+  const progress = document.getElementById("uploadProgress");
+  const msgEl = document.getElementById("uploadMsg");
+  progress.style.display = "flex";
+  msgEl.style.color = "var(--accent)";
+  msgEl.textContent = msg;
+  setTimeout(() => {
+    progress.style.display = "none";
+    msgEl.style.color = "";
+  }, 3000);
+}
+
+// ── Members modal ──────────────────────────────────────────────────────────
+
+function openMembersModal() {
+  document.getElementById("membersModal").classList.add("active");
+  loadMembers();
+}
+
+function closeMembersModal() {
+  document.getElementById("membersModal").classList.remove("active");
+}
+
+async function loadMembers() {
+  const body = document.getElementById("membersModalBody");
+  body.innerHTML = `<div style="color:var(--muted);font-size:13px;">Loading…</div>`;
+
+  const res = await apiFetch(`${API}/workspaces/${currentWorkspace}/members`);
+  if (!res) return;
+
+  const members = await res.json();
+
+  body.innerHTML = `
+    <div class="modal-section-label">Members</div>
+    <div id="membersList"></div>
+    <div class="modal-section-label">Invite Link</div>
+    <div id="inviteSection">
+      <button class="btn-generate" onclick="generateInvite()">+ Generate invite link</button>
+    </div>`;
+
+  const list = document.getElementById("membersList");
+
+  members.forEach(m => {
+    const item = document.createElement("div");
+    item.className = "member-item";
+    item.innerHTML = `
+      <div class="member-avatar">${m.username[0].toUpperCase()}</div>
+      <div class="member-name">${esc(m.username)}</div>
+      <select class="member-role-select" onchange="updateMemberRole(${m.user_id}, this.value)">
+        <option value="pending"  ${m.role==='pending'  ? 'selected':''}>Pending</option>
+        <option value="viewer"   ${m.role==='viewer'   ? 'selected':''}>Viewer</option>
+        <option value="editor"   ${m.role==='editor'   ? 'selected':''}>Editor</option>
+        <option value="owner"    ${m.role==='owner'    ? 'selected':''}>Owner</option>
+      </select>
+      <button class="btn-remove" onclick="removeMember(${m.user_id})">Remove</button>`;
+    list.appendChild(item);
+  });
+}
+
+async function updateMemberRole(userId, role) {
+  const res = await apiFetch(`${API}/workspaces/${currentWorkspace}/members/${userId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ role })
+  });
+  if (!res) return;
+  if (!res.ok) {
+    const data = await res.json();
+    alert(data.detail || "Failed to update role");
+    loadMembers();
+  }
+}
+
+async function removeMember(userId) {
+  if (!confirm("Remove this member from the workspace?")) return;
+  const res = await apiFetch(`${API}/workspaces/${currentWorkspace}/members/${userId}`, {
+    method: "DELETE"
+  });
+  if (!res) return;
+  if (res.ok) {
+    loadMembers();
+  } else {
+    const data = await res.json();
+    alert(data.detail || "Failed to remove member");
+  }
+}
+
+async function generateInvite() {
+  const res = await apiFetch(`${API}/workspaces/${currentWorkspace}/invite`, { method: "POST" });
+  if (!res) return;
+
+  const data = await res.json();
+  if (!res.ok) { alert(data.detail || "Failed to generate invite"); return; }
+
+  const section = document.getElementById("inviteSection");
+  section.innerHTML = `
+    <div class="invite-box">
+      <div class="invite-code" id="inviteCodeText">${esc(data.code)}</div>
+      <button class="btn-copy" onclick="copyInviteCode()">Copy</button>
+    </div>
+    <div style="font-size:11.5px;color:var(--muted);margin-top:8px;">
+      Expires in 7 days · Anyone with this code joins as Pending
+    </div>
+    <button class="btn-generate" onclick="generateInvite()">+ Generate new link</button>`;
+}
+
+function copyInviteCode() {
+  const code = document.getElementById("inviteCodeText").textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.querySelector(".btn-copy");
+    btn.textContent = "Copied!";
+    setTimeout(() => btn.textContent = "Copy", 2000);
+  });
+}
 
 if (authToken) showApp();
 </script>

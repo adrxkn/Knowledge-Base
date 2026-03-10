@@ -35,6 +35,10 @@ class User(Base):
         "Workspace", back_populates="owner",
         cascade="all, delete", lazy="selectin"
     )
+    memberships = relationship(
+        "WorkspaceMember", back_populates="user",
+        cascade="all, delete", lazy="selectin"
+    )
     documents = relationship(
         "Document", back_populates="owner",
         cascade="all, delete", lazy="selectin"
@@ -54,6 +58,14 @@ class Workspace(Base):
     created_at = Column(DateTime(timezone=True), default=now_utc)
 
     owner = relationship("User", back_populates="workspaces")
+    members = relationship(
+        "WorkspaceMember", back_populates="workspace",
+        cascade="all, delete", lazy="selectin"
+    )
+    invites = relationship(
+        "WorkspaceInvite", back_populates="workspace",
+        cascade="all, delete", lazy="selectin"
+    )
     documents = relationship(
         "Document", back_populates="workspace",
         cascade="all, delete", lazy="selectin"
@@ -77,6 +89,7 @@ class Document(Base):
     filename = Column(String, nullable=False)
     file_path = Column(String, nullable=False)
     file_size = Column(Integer)
+    file_hash = Column(String, nullable=True)
     status = Column(String, default="pending")          
     status_message = Column(Text, nullable=True)      
     upload_date = Column(DateTime(timezone=True), default=now_utc)
@@ -97,7 +110,6 @@ class Chunk(Base):
     document_id = Column(Integer, ForeignKey("documents.id", ondelete="CASCADE"), nullable=False)
     workspace_id = Column(Integer, ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False)
     content = Column(Text, nullable=False)
-    # 384 dimensions for all-MiniLM-L6-v2
     embedding = Column(Vector(384))
     created_at = Column(DateTime(timezone=True), default=now_utc)
 
@@ -118,5 +130,34 @@ class ChatMessage(Base):
     workspace = relationship("Workspace", back_populates="chat_messages")
     user = relationship("User", back_populates="chat_messages")
 
+
+class WorkspaceMember(Base):
+    __tablename__ = "workspace_members"
+
+    id = Column(Integer, primary_key=True, index=True)
+    workspace_id = Column(Integer, ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    role = Column(String, nullable=False, default="pending") 
+    joined_at = Column(DateTime(timezone=True), default=now_utc)
+
+    workspace = relationship("Workspace", back_populates="members")
+    user = relationship("User", back_populates="memberships")
+
+
+class WorkspaceInvite(Base):
+    __tablename__ = "workspace_invites"
+
+    id = Column(Integer, primary_key=True, index=True)
+    workspace_id = Column(Integer, ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False)
+    invited_by = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    code = Column(String, unique=True, nullable=False, index=True)
+    role = Column(String, nullable=False, default="pending")  
+    max_uses = Column(Integer, nullable=True)                
+    uses = Column(Integer, default=0)
+    expires_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), default=now_utc)
+
+    workspace = relationship("Workspace", back_populates="invites")
+    creator = relationship("User", foreign_keys=[invited_by])
 
 Base.metadata.create_all(bind=engine)
