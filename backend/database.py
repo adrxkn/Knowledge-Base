@@ -160,4 +160,11 @@ class WorkspaceInvite(Base):
     workspace = relationship("Workspace", back_populates="invites")
     creator = relationship("User", foreign_keys=[invited_by])
 
+class SystemSettings(Base):
+    __tablename__ = "system_settings"
+
+    key = Column(String, primary_key=True)
+    value = Column(Text, nullable=True)
+    updated_at = Column(DateTime(timezone=True), default=now_utc, onupdate=now_utc)
+
 Base.metadata.create_all(bind=engine)

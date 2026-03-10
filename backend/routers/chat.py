@@ -1,5 +1,4 @@
 import json
-import os
 
 import requests as http_requests
 
@@ -11,8 +10,7 @@ from dependencies import get_db, require_role
 from database import ChatMessage, WorkspaceMember, SessionLocal
 from services.models import embedding_model
 from services.rag import fetch_context_chunks, build_prompt, fetch_recent_history
-
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
+from routers.settings import get_setting
 
 router = APIRouter()
 
@@ -45,8 +43,12 @@ def ask_ai(
     db: Session = Depends(get_db),
     member: WorkspaceMember = Depends(require_role("viewer")),
 ):
+    ollama_url = get_setting(db, "ollama_url")
+    model_name = get_setting(db, "model_name")
+    top_k      = int(get_setting(db, "retrieval_top_k"))
+
     q_embedding = embedding_model.encode([question])[0].tolist()
-    rows = fetch_context_chunks(workspace_id, question, q_embedding, db)
+    rows = fetch_context_chunks(workspace_id, question, q_embedding, db, top_k=top_k)
 
     context = "\n\n".join(r[0] for r in rows)
     sources = [{"document": r[1], "snippet": r[0][:200]} for r in rows]
@@ -54,8 +56,8 @@ def ask_ai(
     prompt = build_prompt(context, history_text, question)
 
     response = http_requests.post(
-        f"{OLLAMA_URL}/api/generate",
-        json={"model": "llama3.2", "prompt": prompt, "stream": False},
+        f"{ollama_url}/api/generate",
+        json={"model": model_name, "prompt": prompt, "stream": False},
     )
     answer = response.json().get("response", "")
 
@@ -77,8 +79,12 @@ def ask_ai_stream(
     db: Session = Depends(get_db),
     member: WorkspaceMember = Depends(require_role("viewer")),
 ):
+    ollama_url = get_setting(db, "ollama_url")
+    model_name = get_setting(db, "model_name")
+    top_k      = int(get_setting(db, "retrieval_top_k"))
+
     q_embedding = embedding_model.encode([question])[0].tolist()
-    rows = fetch_context_chunks(workspace_id, question, q_embedding, db)
+    rows = fetch_context_chunks(workspace_id, question, q_embedding, db, top_k=top_k)
 
     context = "\n\n".join(r[0] for r in rows)
     history_text = fetch_recent_history(workspace_id, member.user_id, db)
@@ -89,8 +95,8 @@ def ask_ai_stream(
 
     def stream_and_save():
         response = http_requests.post(
-            f"{OLLAMA_URL}/api/generate",
-            json={"model": "llama3.2", "prompt": prompt, "stream": True},
+            f"{ollama_url}/api/generate",
+            json={"model": model_name, "prompt": prompt, "stream": True},
             stream=True,
         )
         for line in response.iter_lines():
