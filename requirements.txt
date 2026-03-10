@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+sqlalchemy
+pgvector
+passlib[bcrypt]
+python-jose[cryptography]
+PyPDF2
+sentence-transformers
+requests
+python-multipart
