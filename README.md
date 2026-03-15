@@ -7,9 +7,9 @@
 - RAG pipeline with hybrid retrieval (pgvector semantic search + PostgreSQL FTS), Reciprocal Rank Fusion, and cross-encoder reranking
 - Real-time streaming responses with follow-up prompt chips
 - Multi-user RBAC — 4-tier roles (owner / editor / viewer / pending) with workspace invite codes
-- Background document processing — no upload timeouts on large files
+- Background document processing; no upload timeouts on large files
 - Configurable LLM, chunk size, and retrieval settings via the settings page
-- Privacy-first — all inference runs locally via Ollama, no data sent to third-party APIs
+- Option to run all inferences locally via Ollama, or use third-party APIs
 
 ## Prerequisites
  
@@ -32,7 +32,7 @@ cd Knowledge-Base
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate  # Windows
+venv\Scripts\activate 
 pip install -r requirements.txt
 ```
  
@@ -97,6 +97,6 @@ npm install
 npm run dev
 ```
  
-Open [http://localhost:5173](http://localhost:5173), create an account, and configure your Ollama URL in ⚙ Settings.
+Open [http://localhost:5173](http://localhost:5173), create an account, and configure your Ollama URL in Settings.
  
 ---
