@@ -4,6 +4,7 @@ from services.models import embedding_model, rerank_model
 
 
 def build_prompt(context: str, history_text: str, question: str) -> str:
+    math_example = r"Q·K^T / sqrt(dk)' not '\frac{QK^T}{\sqrt{d_k}}"
     return f"""You are a helpful assistant that answers questions strictly from the provided document context.
 
 Rules:
@@ -13,6 +14,8 @@ Rules:
 - Do not invent, assume, or infer information not present in the Context.
 - Be comprehensive and detailed. If the context contains more relevant information, include it. Do not stop at a surface-level answer.
 - Format your response using Markdown: use **bold** for key terms, headers (##) for sections when the answer is long, bullet points or numbered lists where appropriate.
+- For code blocks, only use them for actual programming code or command-line instructions.
+- Never output raw HTML tags like <br>. Use blank lines for paragraph breaks instead.
 
 Conversation history (for understanding intent only — not a factual source):
 {history_text}

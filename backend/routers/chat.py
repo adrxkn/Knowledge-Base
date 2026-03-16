@@ -56,9 +56,16 @@ def ask_ai(
     prompt = build_prompt(context, history_text, question)
 
     response = http_requests.post(
-        f"{ollama_url}/api/generate",
-        json={"model": model_name, "prompt": prompt, "stream": False},
-    )
+    f"{ollama_url}/api/generate",
+    json={
+        "model": model_name,
+        "prompt": prompt,
+        "stream": False,
+        "options": {
+            "temperature": 0.1
+        }
+    },
+)
     answer = response.json().get("response", "")
 
     db.add(ChatMessage(
@@ -96,7 +103,14 @@ def ask_ai_stream(
     def stream_and_save():
         response = http_requests.post(
             f"{ollama_url}/api/generate",
-            json={"model": model_name, "prompt": prompt, "stream": True},
+            json={
+                "model": model_name,
+                "prompt": prompt,
+                "stream": True,
+                "options": {
+                    "temperature": 0.1
+                }
+            },
             stream=True,
         )
         for line in response.iter_lines():

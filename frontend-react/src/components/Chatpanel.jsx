@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { marked } from "marked";
 import { getChatHistory, streamAnswer } from "../api";
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
 
 marked.setOptions({ breaks: true, gfm: true });
 
@@ -11,6 +13,26 @@ const FOLLOWUP_CHIPS = [
   "What are the key points?",
 ];
 
+function renderContent(text) {
+  let cleaned = text.replace(/<br\s*\/?>/gi, '\n');
+  
+  let html = marked.parse(cleaned);
+  
+  html = html.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => {
+    try {
+      return katex.renderToString(math.trim(), { displayMode: true, throwOnError: false });
+    } catch { return _; }
+  });
+
+  html = html.replace(/\$([^\$\n]+?)\$/g, (_, math) => {
+    try {
+      return katex.renderToString(math.trim(), { displayMode: false, throwOnError: false });
+    } catch { return _; }
+  });
+
+  return html;
+}
+
 function Message({ role, text, sources, onChipClick }) {
   return (
     <div className={`message ${role}`}>
@@ -19,7 +41,7 @@ function Message({ role, text, sources, onChipClick }) {
         <div className="msg-role">{role === "user" ? "You" : "Assistant"}</div>
         <div
           className="msg-bubble"
-          dangerouslySetInnerHTML={{ __html: marked.parse(text) }}
+          dangerouslySetInnerHTML={{ __html: renderContent(text) }}
         />
         {sources && sources.length > 0 && (
           <div className="msg-sources">
@@ -164,7 +186,7 @@ export default function ChatPanel({ workspaceId }) {
               <div className="msg-role">Assistant</div>
               <div className="msg-bubble">
                 {streamText
-                  ? <span dangerouslySetInnerHTML={{ __html: marked.parse(streamText) + '<span class="streaming-cursor"></span>' }} />
+                  ? <span dangerouslySetInnerHTML={{ __html: renderContent(streamText) + '<span class="streaming-cursor"></span>' }} />
                   : <div className="thinking"><span /><span /><span /></div>
                 }
               </div>

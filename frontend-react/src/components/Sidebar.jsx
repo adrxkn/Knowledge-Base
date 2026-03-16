@@ -53,7 +53,6 @@ export default function Sidebar({ collapsed, onToggle, currentWorkspace, onSelec
       <aside className={`sidebar${collapsed ? " collapsed" : ""}`}>
         <div className="sidebar-header">
           <div className="sidebar-logo"><span className="dot"></span> Knowledge Base</div>
-          <div className="sidebar-tagline">AI Knowledge Workspace</div>
         </div>
 
         <div className="sidebar-section-label">Workspaces</div>
