@@ -7,9 +7,32 @@
 - RAG pipeline with hybrid retrieval (pgvector semantic search + PostgreSQL FTS), Reciprocal Rank Fusion, and cross-encoder reranking
 - Real-time streaming responses with follow-up prompt chips
 - Multi-user RBAC — 4-tier roles (owner / editor / viewer / pending) with workspace invite codes
-- Background document processing — no upload timeouts on large files
+- Background document processing; no upload timeouts on large files
 - Configurable LLM, chunk size, and retrieval settings via the settings page
-- Privacy-first — all inference runs locally via Ollama, no data sent to third-party APIs
+- Option to run all inferences locally via Ollama, or use third-party APIs
+
+
+## Demo
+
+Querying the popular research paper "Attention Is All You Need" — asking a broad question to summarise the document:
+
+<img width="1919" height="1031" alt="image" src="https://github.com/user-attachments/assets/7f5f7b0e-b609-4359-9d36-7d6895317690" />
+<br>
+<br>
+
+
+Following up with a specific question to demonstrate contextual retrieval:
+
+<img width="1919" height="1030" alt="image" src="https://github.com/user-attachments/assets/76bdb31f-b36b-4589-939d-c88c0235730f" />
+<br>
+<br>
+
+
+Cross-referencing the response against the source document to verify factual accuracy:
+
+<img width="1092" height="997" alt="image" src="https://github.com/user-attachments/assets/a7ac612e-60d9-4ce7-a095-77da23844122" />
+<br>
+As we can see the response accurately reflects the paper's content down to the mathematical formulation, hence verifying that the model retrieves and synthesises relevant chunks from the document without hallucinating or adding information not present in the source.
 
 ## Prerequisites
  
@@ -32,7 +55,7 @@ cd Knowledge-Base
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate  # Windows
+venv\Scripts\activate 
 pip install -r requirements.txt
 ```
  
@@ -97,6 +120,6 @@ npm install
 npm run dev
 ```
  
-Open [http://localhost:5173](http://localhost:5173), create an account, and configure your Ollama URL in ⚙ Settings.
+Open [http://localhost:5173](http://localhost:5173), create an account, and configure your Ollama URL in Settings.
  
 ---
