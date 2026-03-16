@@ -1,16 +1,125 @@
-# React + Vite
+# Knowledge Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> A self-hosted, privacy-first AI knowledge workspace. Upload your documents and query them with a local LLM — nothing leaves your infrastructure.
 
-Currently, two official plugins are available:
+## Features
+ 
+- RAG pipeline with hybrid retrieval (pgvector semantic search + PostgreSQL FTS), Reciprocal Rank Fusion, and cross-encoder reranking
+- Real-time streaming responses with follow-up prompt chips
+- Multi-user RBAC — 4-tier roles (owner / editor / viewer / pending) with workspace invite codes
+- Background document processing; no upload timeouts on large files
+- Configurable LLM, chunk size, and retrieval settings via the settings page
+- Option to run all inferences locally via Ollama, or use third-party APIs
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## React Compiler
+## Demo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Querying the popular research paper "Attention Is All You Need" — asking a broad question to summarise the document:
 
-## Expanding the ESLint configuration
+<img width="1919" height="1031" alt="image" src="https://github.com/user-attachments/assets/7f5f7b0e-b609-4359-9d36-7d6895317690" />
+<br>
+<br>
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+Following up with a specific question to demonstrate contextual retrieval:
+
+<img width="1919" height="1030" alt="image" src="https://github.com/user-attachments/assets/76bdb31f-b36b-4589-939d-c88c0235730f" />
+<br>
+<br>
+
+
+Cross-referencing the response against the source document to verify factual accuracy:
+
+<img width="1092" height="997" alt="image" src="https://github.com/user-attachments/assets/a7ac612e-60d9-4ce7-a095-77da23844122" />
+<br>
+As we can see the response accurately reflects the paper's content down to the mathematical formulation, hence verifying that the model retrieves and synthesises relevant chunks from the document without hallucinating or adding information not present in the source.
+
+## Prerequisites
+ 
+- Python 3.11+
+- PostgreSQL with [pgvector](https://github.com/pgvector/pgvector) extension
+- [Ollama](https://ollama.com) with a model pulled — `ollama pull llama3.2`
+- Node.js 18+
+ 
+---
+ 
+## Setup
+ 
+**1. Clone**
+```bash
+git clone https://github.com/adrxkn/Knowledge-Base.git
+cd Knowledge-Base
+```
+ 
+**2. Backend**
+```bash
+cd backend
+python -m venv venv
+venv\Scripts\activate 
+pip install -r requirements.txt
+```
+ 
+Create `backend/.env`:
+```env
+DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/knowledgebase
+SECRET_KEY=your_random_secret
+```
+ 
+Run migrations in psql:
+```sql
+CREATE EXTENSION IF NOT EXISTS vector;
+ 
+ALTER TABLE chunks ADD COLUMN IF NOT EXISTS content_tsv tsvector
+  GENERATED ALWAYS AS (to_tsvector('english', content)) STORED;
+CREATE INDEX IF NOT EXISTS chunks_content_tsv_idx ON chunks USING GIN (content_tsv);
+ 
+CREATE TABLE IF NOT EXISTS workspace_members (
+    id SERIAL PRIMARY KEY,
+    workspace_id INTEGER NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    role VARCHAR NOT NULL DEFAULT 'pending',
+    joined_at TIMESTAMPTZ DEFAULT NOW()
+);
+ 
+CREATE TABLE IF NOT EXISTS workspace_invites (
+    id SERIAL PRIMARY KEY,
+    workspace_id INTEGER NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    invited_by INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    code VARCHAR UNIQUE NOT NULL,
+    role VARCHAR NOT NULL DEFAULT 'pending',
+    max_uses INTEGER,
+    uses INTEGER DEFAULT 0,
+    expires_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+ 
+CREATE TABLE IF NOT EXISTS system_settings (
+    key VARCHAR PRIMARY KEY,
+    value TEXT,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+ 
+INSERT INTO system_settings (key, value) VALUES
+  ('ollama_url', 'http://localhost:11434'),
+  ('model_name', 'llama3.2'),
+  ('chunk_size', '1000'),
+  ('chunk_overlap', '150'),
+  ('retrieval_top_k', '5')
+ON CONFLICT (key) DO NOTHING;
+```
+ 
+Start backend:
+```bash
+uvicorn main:app
+```
+ 
+**3. Frontend**
+```bash
+cd frontend-react
+npm install
+npm run dev
+```
+ 
+Open [http://localhost:5173](http://localhost:5173), create an account, and configure your Ollama URL in Settings.
+ 
+---
