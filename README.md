@@ -30,16 +30,17 @@ Following up with a specific question to demonstrate contextual retrieval:
 
 Cross-referencing the response against the source document to verify factual accuracy:
 
-<img width="1092" height="997" alt="image" src="https://github.com/user-attachments/assets/a7ac612e-60d9-4ce7-a095-77da23844122" />
+<img width="1513" height="1087" alt="image" src="https://github.com/user-attachments/assets/64694af5-95ff-46fb-a99e-d68aba1b62b4" />
 <br>
+
 As we can see the response accurately reflects the paper's content down to the mathematical formulation, hence verifying that the model retrieves and synthesises relevant chunks from the document without hallucinating or adding information not present in the source.
 
 ## Prerequisites
  
 - Python 3.11+
 - PostgreSQL with [pgvector](https://github.com/pgvector/pgvector) extension
-- [Ollama](https://ollama.com) with a model pulled — `ollama pull llama3.2`
-- Node.js 18+
+- [Ollama](https://ollama.com) with a model pulled, for example the local model llama3.2. Run: `ollama pull llama3.2`
+- Node.js 18+ (for running the frontend dev server)
  
 ---
  
