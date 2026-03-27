@@ -4,7 +4,7 @@ from services.models import embedding_model, rerank_model
 
 
 def build_prompt(context: str, history_text: str, question: str) -> str:
-    math_example = r"Q·K^T / sqrt(dk)' not '\frac{QK^T}{\sqrt{d_k}}"
+    #math_example = r"Q·K^T / sqrt(dk)' not '\frac{QK^T}{\sqrt{d_k}}"
     return f"""You are a helpful assistant that answers questions strictly from the provided document context.
 
 Rules:
